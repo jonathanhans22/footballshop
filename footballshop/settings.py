@@ -34,6 +34,8 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "jonathan-hans41-footballshop.pbp.cs.
 
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
