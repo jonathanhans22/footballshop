@@ -14,7 +14,8 @@ Kelas : PBP B
     - jika sudah terpasang semua saya membuat models nya terlebih dahulu dengan menambahkan brand karena menurut saya di footballshop brand adalah suatu yang penting juga
     - selanjutnya saya melakukan routing untuk di urls nya jadi saya bisa menyambungkan untuk ke main html nya
     - jika semua sudah saya push ke pws master agar bisa nyambung ke pws nya dan bisa dilihat oleh teman-teman saya melalui link nya
-2.  pengguna meminta halaman web dengan mengetik URL 
+2.  https://www.google.com/url?sa=i&url=https%3A%2F%2Fpbp-fasilkom-ui.github.io%2Fganjil-2023%2Fassignments%2Ftutorial%2Ftutorial-1%2F&psig=AOvVaw3eRnGBM5YJ8i4kaiUdwe-k&ust=1757502407505000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCPDotObEy48DFQAAAAAdAAAAABAE = sumber
+    pengguna meminta halaman web dengan mengetik URL 
     ->  menerima permintaan HTTP GET untuk path ->  
     File urls.py seperti papan petunjuk atau daftar isi, Django mencari pola URL yang cocok dengan yang diminta user, nanti Django akan memanggil fungsi dari views.py 
     -> View akan berkomunikasi dengan models.py untuk mengambil data produk dari database 
