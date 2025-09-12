@@ -33,6 +33,7 @@ link postman
 https://docs.google.com/document/d/1HWYqaDsvJgzHOPaWzgw2DnTjjCmL82fk_5FJP5YmbyE/edit?usp=sharing
 
 
+
 ----------------TUGAS 2----------------
 1. jadi step by step nya 
     - saya membuat repository di github terlebih dahulu
