@@ -4,6 +4,15 @@ Nama : Jonathan Hans Emanuelle
 NPM : 2406414025
 
 Kelas : PBP B
+----------------TUGAS 4----------------
+1. authenticationForm adalah komponen bawaan django yang berfungsi sebagai form login siap pakai untuk memvalidasi kredensial pengguna. kelebihannya terletak pada keamanan dan kemudahan integrasi dengan sistem autentikasi django, sehingga mempercepat proses pengembangan. namun, kekurangannya adalah kustomisasi yang terbatas, di mana secara default form ini terikat pada login menggunakan username, sehingga memerlukan upaya tambahan jika ingin mengimplementasikan login via email atau metode lainnya.
+
+2. derbedaan mendasar antara keduanya terletak pada fungsinya: autentikasi adalah proses verifikasi identitas untuk menjawab pertanyaan, sementara otorisasi adalah proses penentuan hak akses setelah identitas terverifikasi untuk menjawab. Django mengimplementasikan autentikasi melalui modul django.contrib.auth yang mengelola data User dan proses login. Sementara itu, otorisasi diimplementasikan melalui sistem perizinan , grup, dan atribut pengguna untuk mengontrol akses ke berbagai bagian aplikasi.
+
+3. dalam menyimpan state, cookies menyimpan data langsung di peramban pengguna, membuatnya ringan bagi server namun tidak aman untuk informasi sensitif karena mudah diakses dan dimodifikasi oleh klien. Sebaliknya, sessions jauh lebih aman karena data disimpan di sisi server, dan hanya sebuah ID unik sebagai penanda yang disimpan dalam cookie di peramban. Keunggulan keamanan ini menjadi alasan utama penggunaannya, meskipun konsekuensinya adalah peningkatan beban dan kebutuhan sumber daya di sisi server untuk mengelola data dari setiap sesi pengguna aktif.
+
+4. secara default, cookies tidak aman dan rentan terhadap serangan seperti Cross-Site Scripting (XSS) dan Cross-Site Request Forgery (CSRF). namun, django secara proaktif menangani risiko ini dengan menyediakan lapisan keamanan yang kuat. django mewajibkan penggunaan token CSRF pada setiap form untuk mencegah permintaan yang tidak sah, serta secara otomatis menerapkan flag HttpOnly pada cookie sesi. pengaturan ini secara efektif memblokir akses cookie dari skrip sisi klien, sehingga memberikan perlindungan yang tangguh terhadap upaya pencurian sesi melalui serangan XSS.
+
 
 ----------------TUGAS 3----------------
 1. Data delivery sangat penting dalam implementasi sebuah platform karena platform modern pada dasarnya adalah kumpulan dari berbagai komponen terpisah yang harus dapat berkomunikasi secara efektif. Komponen-komponen ini mencakup front end yang dilihat oleh pengguna, logika di server , aplikasi mobile, hingga web development nya . Data delivery, yang umumnya diwujudkan melalui API, berfungsi sebagai jembatan penghubung yang memungkinkan semua bagian ini untuk bertukar informasi secara real-time dan terstandarisasi. data delivery juga krusial untuk menjalankan platform dengan layanan pihak ketiga, seperti sistem pembayaran. tanpa adanya sistem pengiriman data yang andal, setiap komponen akan terisolasi, sehingga platform tidak dapat berfungsi sebagai satu kesatuan.

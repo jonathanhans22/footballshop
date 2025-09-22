@@ -1,6 +1,7 @@
 # models.py
 import uuid  
 from django.db import models
+from django.contrib.auth.models import User
 
 class Product(models.Model):
     # --- Definisikan pilihan kategori yang benar ---
@@ -11,7 +12,7 @@ class Product(models.Model):
         ('BOTTLE', 'botol'),
         ('TRAINING KIT', 'Pakaian Latihan'),
     ]
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     price = models.IntegerField()
@@ -23,8 +24,3 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
-class Employee(models.Model):
-    name = models.CharField(max_length=255)
-    age = models.IntegerField()
-    persona = models.TextField()

@@ -9,20 +9,22 @@
 <h5>Class:</h5>
 <p>{{ class }}</p>
 
-<h5>Employee:</h5>
-<p>{{ name }}</p>
-
-<h5>age:</h5>
-<p>{{ age }}</p>
-
-<h5>persona:</h5>
-<p>{{ persona }}</p>
-
 <a href="{% url 'main:create_product' %}">
     <button>+ Add Product</button>
 </a>
+<a href="{% url 'main:logout' %}">
+    <button>Logout</button>
+</a>
 
+<h5>Sesi terakhir login: {{ last_login }}</h5>
 <hr>
+<!-- Tambahkan kode ini -->
+<a href="?filter=all">
+    <button type="button">All Articles</button>
+</a>
+<a href="?filter=my">
+    <button type="button">My Articles</button>
+</a> 
 
 {% if not product_list %}
 <p>Belum ada data penjualan pada Football Shop.</p>
