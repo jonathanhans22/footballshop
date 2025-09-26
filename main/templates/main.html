@@ -1,50 +1,205 @@
-<h1>Football Shop</h1>
+{% extends 'base.html' %}
+{% load static %}
 
-<h5>NPM: </h5>
-<p>{{ npm }}</p>
+{% block meta %}
+<title>Football Shop - Beranda</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f6;
+    }
 
-<h5>Name:</h5>
-<p>{{ name }}</p>
-
-<h5>Class:</h5>
-<p>{{ class }}</p>
-
-<a href="{% url 'main:create_product' %}">
-    <button>+ Add Product</button>
-</a>
-<a href="{% url 'main:logout' %}">
-    <button>Logout</button>
-</a>
-
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-<hr>
-<!-- Tambahkan kode ini -->
-<a href="?filter=all">
-    <button type="button">All Articles</button>
-</a>
-<a href="?filter=my">
-    <button type="button">My Articles</button>
-</a> 
-
-{% if not product_list %}
-<p>Belum ada data penjualan pada Football Shop.</p>
-{% else %}
-
-{% for product in product_list %}
-<div>
-    <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        
+        
+        padding-top: 80px; 
+    }
 
 
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem;
+        color: #333;
+    }
     
-    {% if product.thumbnail %}
-    <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
-    <br />
+    .filter-controls {
+        margin-top: 20px;
+    }
+
+    .filter-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: 1px solid #007bff; 
+    border-radius: 20px;     
+    background-color: #fff;   
+    color: #007bff;            
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease; 
+}
+
+    .filter-btn:hover, 
+.filter-btn.active {
+    background-color: #007bff; 
+    color: #fff;               
+}
+
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
+    
+
+    .product-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        overflow: hidden; 
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+    
+    .card-image img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover; 
+    }
+    
+    .card-body {
+        padding: 20px;
+        flex-grow: 1; 
+        
+    }
+
+    .card-body h3 {
+        margin: 0 0 10px 0;
+        font-size: 1.25rem;
+    }
+    
+    .card-body h3 a {
+        text-decoration: none;
+        color: #333;
+    }
+    
+    .card-body .price {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #28a745;
+        margin-bottom: 15px;
+    }
+
+    .card-body .description {
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.5;
+    }
+    
+    .card-footer {
+        padding: 0 20px 20px 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .card-btn {
+        flex-grow: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-details { background-color: #007bff; }
+    .btn-details:hover { background-color: #0056b3; }
+    
+    .btn-edit { background-color: #ffc107; color: #333; }
+    .btn-edit:hover { background-color: #e0a800; }
+
+    .btn-delete { background-color: #dc3545; } 
+    .btn-delete:hover { background-color: #c82333; }
+
+    .empty-state {
+        text-align: center;
+        padding: 50px;
+        color: #777;
+    }
+
+</style>
+{% endblock meta %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Daftar Produk</h1>
+        <div class="filter-controls">
+            <a href="?filter=all"> <button class="filter-btn {% if active_filter != 'my' %}active{% endif %}">Semua Produk</a>
+            <a href="?filter=my"> <button class="filter-btn {% if active_filter == 'my' %}active{% endif %}">Produk Saya</a>
+        </div>
+    </div>
+
+    {% if not product_list %}
+        <div class="empty-state">
+            <p>Belum ada produk yang tersedia saat ini.</p>
+        </div>
+    {% else %}
+        <div class="product-grid">
+            {% for product in product_list %}
+            <div class="product-card">
+                <div class="card-image">
+                    {% if product.thumbnail %}
+                        <img src="{{ product.thumbnail }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="{% static 'images/placeholder.png' %}" alt="No image available">
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h3><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h3>
+                    
+                    {# SARAN: Tambahkan field 'price' pada model Product Anda #}
+                    {% if product.price %}
+                    <p class="price">Rp {{ product.price|floatformat:2 }}</p>
+                    {% endif %}
+
+                    {# SARAN: Tambahkan field 'description' pada model Product Anda #}
+                    {% if product.description %}
+                    <p class="description">{{ product.description|truncatewords:15 }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                <a href="{% url 'main:show_product' product.id %}" class="card-btn btn-details">Lihat Detail</a>
+                {% if user.is_authenticated and product.user == user %}
+                    <a href="{% url 'main:edit_product' product.pk %}" class="card-btn btn-edit">Edit</a>
+                    <a href="{% url 'main:delete_product' product.pk %}" 
+                    class="card-btn btn-delete" 
+                    onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                    Delete
+                    </a>
+                {% endif %}
+            </div>
+            </div>
+            {% endfor %}
+        </div>
     {% endif %}
-
-    <p><a href="{% url 'main:show_product' product.id %}"><button>Read More</button></a></p>
 </div>
-
-<hr>
-{% endfor %}
-
-{% endif %}
+{% endblock content %}

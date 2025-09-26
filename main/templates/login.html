@@ -1,32 +1,151 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>Login</title>
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url("{% static 'image/owo.jpg' %}");
+        background-size: cover;          
+        background-position: center;     
+        background-repeat: no-repeat;    
+        background-attachment: fixed;
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        padding: 20px;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 400px;
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .login-card h1 {
+        margin-bottom: 25px;
+        color: #333;
+        font-weight: 600;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-weight: 500;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .login-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .messages {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .messages li {
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #f8d7da; /* Warna error */
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .register-link {
+        margin-top: 25px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .register-link a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .register-link a:hover {
+        text-decoration: underline;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-    <h1>Login</h1>
+<div class="login-container">
+    <div class="login-card">
+        <h1>Login</h1>
 
-    <form method="POST" action="">
-        {% csrf_token %}
-        <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td><input class="btn login_btn" type="submit" value="Login" /></td>
-        </tr>
-        </table>
-    </form>
+        <form method="POST" action="">
+            {% csrf_token %}
+            
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
 
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %} Don't have an account yet?
-    <a href="{% url 'main:register' %}">Register Now</a>
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+            </div>
+            
+            <button class="login-btn" type="submit">Login</button>
+        </form>
+
+        <div class="register-link">
+            <p>Belum punya akun? <a href="{% url 'main:register' %}">Daftar Sekarang</a></p>
+        </div>
     </div>
-
+</div>
 {% endblock content %}

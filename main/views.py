@@ -11,35 +11,54 @@ import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-@login_required(login_url='/login')
+@login_required(login_url='/login') # Wajib agar request.user selalu ada
 def show_main(request):
-    filter_type = request.GET.get("filter", "all")  # default 'all'
-
-    if filter_type == "all":
-        product_list = Product.objects.all()
-    else:
+    # 1. Ambil semua produk secara default
+    product_list = Product.objects.all()
+    
+    # 2. Dapatkan nilai parameter 'filter' dari URL
+    filter_type = request.GET.get('filter')
+    
+    # 3. Jika filter adalah 'my', ubah daftar produk
+    if filter_type == 'my':
+        # Ini adalah baris kunci:
+        # Filter Product dimana field 'user' sama dengan pengguna yang sedang login
         product_list = Product.objects.filter(user=request.user)
-
+        
     context = {
-        'npm': '240123456',
         'name': request.user.username,
-        'class': 'PBP B',
+        'npm' : "2406414025",
+        'class' : "PBP B",
         'product_list': product_list,
-        'last_login': request.COOKIES.get('last_login', 'Never')
+        'active_filter': filter_type,
     }
-    return render(request, "main.html",context)
 
+    return render(request, "main.html", context)
+
+@login_required(login_url='/login/')
 def create_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            # 1. Tahan penyimpanan, jangan langsung ke database
+            product = form.save(commit=False)
+            
+            # 2. Sisipkan data user yang sedang login ke dalam field 'user'
+            product.user = request.user
+            
+            # 3. Sekarang simpan produk sepenuhnya ke database
+            product.save()
+            
+            # Tambahkan pesan sukses (opsional tapi bagus)
+            messages.success(request, 'Produk baru berhasil ditambahkan!')
+            
             return redirect('main:show_main')
     else:
         form = ProductForm()
 
     context = {'form': form}
     return render(request, "create_product.html", context)
+
 
 @login_required(login_url='/login')
 def show_product(request, id):
@@ -115,3 +134,21 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))

@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block meta %}
-<title>Tambah Produk Baru</title>
+<title>Edit Produk</title>
 <style>
-    /* Menggunakan CSS yang mirip dengan halaman login/register */
+    /* Menggunakan CSS yang SAMA PERSIS dengan halaman create_product */
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f7f6; /* Warna background netral */
+        background-color: #f4f7f6;
     }
 
     .form-container {
@@ -20,11 +20,11 @@
 
     .form-card {
         width: 100%;
-        max-width: 600px; /* Lebih lebar untuk form yang lebih banyak field */
+        max-width: 600px;
         background-color: #ffffff;
         padding: 40px;
         border-radius: 12px;
-        box-shadow: 0 4px Hapus20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
     .form-card h1 {
@@ -68,14 +68,6 @@
         outline: none;
         border-color: #007bff;
     }
-    
-    .form-group .errorlist {
-        list-style: none;
-        padding: 0;
-        margin-top: 5px;
-        font-size: 13px;
-        color: #dc3545;
-    }
 
     .submit-btn {
         width: 100%;
@@ -83,8 +75,8 @@
         margin-top: 10px;
         border: none;
         border-radius: 8px;
-        background-color: #007bff;
-        color: white;
+        background-color: #ffc107; /* Warna kuning untuk tombol Edit */
+        color: #212529; /* Warna teks gelap agar kontras dengan kuning */
         font-size: 16px;
         font-weight: bold;
         cursor: pointer;
@@ -92,7 +84,7 @@
     }
 
     .submit-btn:hover {
-        background-color: #0056b3;
+        background-color: #e0a800;
     }
 </style>
 {% endblock meta %}
@@ -101,7 +93,7 @@
 {% include 'navbar.html' %}
 <div class="form-container">
     <div class="form-card">
-        <h1>Tambah Produk Baru</h1>
+        <h1>Edit Produk</h1>
 
         <form method="POST" action="">
             {% csrf_token %}
@@ -119,7 +111,7 @@
             </div>
             {% endfor %}
             
-            <button class="submit-btn" type="submit">Simpan Produk</button>
+            <button class="submit-btn" type="submit">Update Produk</button>
         </form>
     </div>
 </div>
