@@ -4,6 +4,59 @@ Nama : Jonathan Hans Emanuelle
 NPM : 2406414025
 
 Kelas : PBP B
+----------------TUGAS 5----------------
+1. Urutannya dari yang paling kuat ke yang paling lemah itu:
+
+!important: Ini kartu truf Kalau kamu tambahin !important di akhir sebuah style (contoh: color: red !important;), aturan ini bakal ngalahin semua aturan lainnya. Tapi hati-hati, terlalu sering pakai ini bisa bikin pusing sendiri pas debugging.
+
+Inline CSS: Style yang ditulis langsung di dalam tag HTML (<div style="color: blue;">). Ini super spesifik karena cuma berlaku buat satu elemen itu aja.
+
+ID Selector (#nama-id): Karena ID itu harus unik di satu halaman, selector ini dianggap sangat kuat. Kalau kamu menargetkan elemen dengan ID-nya, gayanya bakal susah ditimpa sama selector lain.
+
+Class (.nama-kelas), Attribute ([type="submit"]), dan Pseudo-class (:hover): Ini level di bawah ID. Mereka cukup spesifik dan paling sering kita pakai sehari-hari. Kalau ada dua selector di level ini, yang punya lebih banyak class biasanya menang.
+
+Element/Tag Selector (div, h1, p): Ini adalah kasta paling rendah. Selector ini menargetkan semua tag dengan nama tersebut, jadi kekuatannya paling lemah.
+
+2. Zaman sekarang, orang buka website dari mana aja: laptop, tablet, HP, bahkan smartwatch. Nah, responsive design itu konsep "sakti" yang bikin website kita bisa tampil bagus dan nyaman dipakai di semua ukuran layar itu. Tujuannya cuma satu: memberikan pengalaman terbaik buat pengguna, nggak peduli perangkat apa yang mereka pakai.
+
+Kalau website nggak responsif, pengalamannya bisa jadi mimpi buruk. Bayangin buka situs berita di HP tapi tulisannya kecil banget sampai harus di-zoom terus, atau harus geser-geser layar ke kanan-kiri cuma buat baca satu kalimat. Dijamin pengunjung langsung kabur!
+
+Contoh Aplikasi yang Sudah Responsif:
+Hampir semua website modern itu responsif. Coba aja buka YouTube atau Tokopedia di laptop, terus kecilin jendela browser-nya. Kamu bakal lihat tata letaknya berubah secara ajaib. Kolomnya jadi lebih sedikit, menunya mungkin jadi ikon hamburger, dan ukuran teksnya tetap enak dibaca. Ini karena mereka dirancang "cair" untuk beradaptasi.
+
+Contoh Aplikasi yang Tidak Responsif:
+Banyak situs-situs universitas atau pemerintahan zaman dulu dibuat dengan ukuran pixel yang tetap (fixed-width). Contohnya, situs dibuat pas untuk layar lebar 1024px. Kalau dibuka di HP yang layarnya cuma 360px, tampilannya bakal jadi versi "mini" dari versi desktop yang bikin mata jereng. Inilah kenapa responsive design bukan lagi pilihan, tapi sebuah keharusan.
+
+3.  - Padding adalah ruang di dalam kotak, antara konten (teks/gambar) dan garis batasnya. Bayangin kamu masukin barang ke dalam kardus, terus kamu kasih bubble wrap di dalamnya. Bubble wrap itu adalah padding. Padding bikin konten jadi nggak mepet-mepet sama pinggiran.
+    Cara Pakai: padding: 10px; (memberi jarak 10px di semua sisi) atau padding-top: 15px; (cuma di sisi atas).
+    - Margin adalah ruang di luar kotak, yang jadi pemisah antara kotak itu dengan elemen lain di sekitarnya. Kalau ada dua kardus di lantai, jarak di antara kedua kardus itu adalah margin. Margin ini transparan dan nggak punya warna latar.
+    Cara Pakai: margin: 20px; (memberi jarak 20px dari elemen lain di semua sisi) atau margin-left: 5px; (cuma di sisi kiri).
+    - Border adalah garis batas atau "tembok" dari kotak itu sendiri. Kamu bisa atur ketebalan, gaya (putus-putus, solid), dan warnanya.
+    Cara Pakai: border: 2px solid black; (garis setebal 2px, solid, warna hitam).
+
+4. Flexbox dan Grid adalah dua "jurus" andalan di CSS modern untuk bikin tata letak yang kompleks jadi gampang. Keduanya super hebat, tapi punya kegunaan yang berbeda. Contoh kamu punya setumpuk kartu dan kamu mau menyusunnya rapi dalam satu baris atau satu kolom. Itulah tugas utama Flexbox. Kekuatannya mengatur elemen dalam satu dimensi (horizontal ATAU vertikal).
+
+Kegunaan:
+-Bikin navbar yang item-itemnya bisa rata kiri, kanan, atau tengah dengan gampang.
+-Menyusun item-item di dalam sebuah kartu (misal, gambar di atas, teks di tengah, tombol di bawah).
+-Membuat elemen-elemen punya ruang yang sama rata secara otomatis.
+Pokoknya, kalau urusannya menata elemen dalam satu baris lurus, Flexbox jagonya.
+
+Grid Layout
+Sekarang bayangin kamu mau bikin tata letak koran atau majalah, di mana ada kolom DAN baris sekaligus. Nah, inilah kekuatan Grid.
+
+Kekuatan nya ialah mengatur elemen dalam dua dimensi (horizontal DAN vertikal).
+
+Kegunaan:
+- Membuat layout utama sebuah halaman web (header, sidebar, konten utama, footer).
+- Menampilkan galeri foto atau daftar produk dalam bentuk petak-petak (grid) yang rapi.
+- Menciptakan desain yang kompleks di mana elemen-elemen harus presisi di dalam kolom dan baris tertentu.
+
+5.  - pertama saya membuat terlebih dahulu untuk global css nya dan tempat image nya untuk membuat jadi background
+    - menurut saya ini juga tidak terlalu susah karena hanya implementasi css di setiap halaman dan menambahkan navbar untuk atas dari main html nya 
+    - lalu saya membuat delete product dan edit product di views.py agar bisa nanti saya pakai di main.html nya
+    - jangan lupa saya memfilter ketika saya tekan produk saya.
+    - tambahkan juga static di settings nya agar link static bisa dipake
 ----------------TUGAS 4----------------
 1. authenticationForm adalah komponen bawaan django yang berfungsi sebagai form login siap pakai untuk memvalidasi kredensial pengguna. kelebihannya terletak pada keamanan dan kemudahan integrasi dengan sistem autentikasi django, sehingga mempercepat proses pengembangan. namun, kekurangannya adalah kustomisasi yang terbatas, di mana secara default form ini terikat pada login menggunakan username, sehingga memerlukan upaya tambahan jika ingin mengimplementasikan login via email atau metode lainnya.
 
