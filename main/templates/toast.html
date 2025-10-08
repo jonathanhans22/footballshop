@@ -1,0 +1,28 @@
+{% load static %}
+<div 
+    id="toast-notification"
+    class="fixed bottom-8 right-8 w-full max-w-xs p-4 rounded-xl shadow-lg text-white z-[100] opacity-0 translate-y-10 transition-all duration-300 ease-in-out"
+    role="alert"
+>
+    <div class="flex items-start">
+        <div id="toast-icon-container" class="flex-shrink-0 w-8 h-8 flex items-center justify-center text-2xl">
+            </div>
+
+        <div class="ml-3 flex-1">
+            <h3 class="font-bold text-md" id="toast-title"></h3>
+            <p class="text-sm opacity-90" id="toast-message"></p>
+        </div>
+
+        <button 
+            type="button" 
+            class="ml-4 -mr-2 -my-2 p-2 rounded-lg inline-flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 transition-colors"
+            aria-label="Close"
+            onclick="hideToast()"
+        >
+            <span class="sr-only">Close</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        </button>
+    </div>
+</div>
+
+<script src="{% static 'js/toast.js' %}"></script>

@@ -4,107 +4,13 @@
 {% block meta %}
 <title>Register</title>
 <style>
-    /* Menggunakan CSS yang SAMA PERSIS dengan halaman login untuk konsistensi */
-    body, html {
-        height: 100%;
-        margin: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f7f6;
-        /* Jika Anda menggunakan gambar background, pastikan konfigurasinya ada di sini */
+    /* Style khusus untuk background halaman ini */
+    body {
         background-image: url("{% static 'image/owo.jpg' %}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        background-size: cover;          
+        background-position: center;     
+        background-repeat: no-repeat;    
         background-attachment: fixed;
-    }
-
-    .auth-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 80vh;
-        padding: 20px;
-    }
-
-    .auth-card {
-        width: 100%;
-        max-width: 420px; /* Sedikit lebih lebar untuk form register */
-        background-color: #ffffff;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    .auth-card h1 {
-        margin-bottom: 25px;
-        color: #333;
-        font-weight: 600;
-    }
-    
-    .form-group {
-        margin-bottom: 15px; /* Sedikit lebih rapat */
-        text-align: left;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        color: #555;
-        font-weight: 500;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-sizing: border-box;
-        transition: border-color 0.3s;
-    }
-
-    .form-group input:focus {
-        outline: none;
-        border-color: #007bff;
-    }
-
-    .auth-btn {
-        width: 100%;
-        padding: 12px;
-        margin-top: 10px;
-        border: none;
-        border-radius: 8px;
-        background-color: #007bff; /* Warna hijau untuk register */
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .auth-btn:hover {
-        background-color: #218838;
-    }
-    
-    /* Style untuk error di bawah field */
-    .form-group .errorlist {
-        list-style: none;
-        padding: 0;
-        margin-top: 5px;
-        font-size: 13px;
-        color: #dc3545;
-    }
-
-    .auth-link {
-        margin-top: 25px;
-        font-size: 14px;
-        color: #555;
-    }
-
-    .auth-link a {
-        color: #007bff;
-        text-decoration: none;
-        font-weight: bold;
     }
 </style>
 {% endblock meta %}
@@ -122,12 +28,12 @@
                 {{ field.label_tag }}
                 {{ field }}
                 {% if field.errors %}
-                    {{ field.errors }}
+                    <div class="text-red-500 text-sm mt-1">{{ field.errors }}</div>
                 {% endif %}
             </div>
             {% endfor %}
             
-            <button class="auth-btn" type="submit">Daftar</button>
+            <button class="btn btn-primary w-full" type="submit">Daftar</button>
         </form>
 
         <div class="auth-link">

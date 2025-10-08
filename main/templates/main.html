@@ -3,203 +3,447 @@
 
 {% block meta %}
 <title>Football Shop - Beranda</title>
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f7f6;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        
-        
-        padding-top: 80px; 
-    }
-
-
-    .page-header {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-    .page-header h1 {
-        font-size: 2.5rem;
-        color: #333;
-    }
-    
-    .filter-controls {
-        margin-top: 20px;
-    }
-
-    .filter-btn {
-    padding: 10px 20px;
-    margin: 0 10px;
-    border: 1px solid #007bff; 
-    border-radius: 20px;     
-    background-color: #fff;   
-    color: #007bff;            
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease; 
-}
-
-    .filter-btn:hover, 
-.filter-btn.active {
-    background-color: #007bff; 
-    color: #fff;               
-}
-
-
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 30px;
-    }
-    
-
-    .product-card {
-        background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        overflow: hidden; 
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-    }
-    
-    .card-image img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover; 
-    }
-    
-    .card-body {
-        padding: 20px;
-        flex-grow: 1; 
-        
-    }
-
-    .card-body h3 {
-        margin: 0 0 10px 0;
-        font-size: 1.25rem;
-    }
-    
-    .card-body h3 a {
-        text-decoration: none;
-        color: #333;
-    }
-    
-    .card-body .price {
-        font-size: 1.1rem;
-        font-weight: bold;
-        color: #28a745;
-        margin-bottom: 15px;
-    }
-
-    .card-body .description {
-        font-size: 0.9rem;
-        color: #666;
-        line-height: 1.5;
-    }
-    
-    .card-footer {
-        padding: 0 20px 20px 20px;
-        display: flex;
-        gap: 10px;
-    }
-
-    .card-btn {
-        flex-grow: 1;
-        padding: 10px;
-        border: none;
-        border-radius: 8px;
-        text-align: center;
-        text-decoration: none;
-        color: #fff;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .btn-details { background-color: #007bff; }
-    .btn-details:hover { background-color: #0056b3; }
-    
-    .btn-edit { background-color: #ffc107; color: #333; }
-    .btn-edit:hover { background-color: #e0a800; }
-
-    .btn-delete { background-color: #dc3545; } 
-    .btn-delete:hover { background-color: #c82333; }
-
-    .empty-state {
-        text-align: center;
-        padding: 50px;
-        color: #777;
-    }
-
-</style>
 {% endblock meta %}
 
 {% block content %}
 {% include 'navbar.html' %}
+{% include 'toast.html' %}
+{% include 'modal.html' %}
 
 <div class="container">
     <div class="page-header">
         <h1>Daftar Produk</h1>
-        <div class="filter-controls">
-            <a href="?filter=all"> <button class="filter-btn {% if active_filter != 'my' %}active{% endif %}">Semua Produk</a>
-            <a href="?filter=my"> <button class="filter-btn {% if active_filter == 'my' %}active{% endif %}">Produk Saya</a>
+        <div class="filter-controls flex justify-center space-x-4 mb-8">
+            <button id="filter-all" class="btn btn-primary">
+                Semua Produk
+            </button>
+            <button id="filter-my" class="btn btn-secondary">
+                Produk Saya
+            </button>
         </div>
     </div>
 
-    {% if not product_list %}
-        <div class="empty-state">
-            <p>Belum ada produk yang tersedia saat ini.</p>
-        </div>
-    {% else %}
-        <div class="product-grid">
-            {% for product in product_list %}
-            <div class="product-card">
-                <div class="card-image">
-                    {% if product.thumbnail %}
-                        <img src="{{ product.thumbnail }}" alt="{{ product.name }}">
-                    {% else %}
-                        <img src="{% static 'images/placeholder.png' %}" alt="No image available">
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    <h3><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h3>
-                    
-                    {# SARAN: Tambahkan field 'price' pada model Product Anda #}
-                    {% if product.price %}
-                    <p class="price">Rp {{ product.price|floatformat:2 }}</p>
-                    {% endif %}
+    <div id="loading" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
+    <svg class="animate-spin h-8 w-8 text-green-600 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+    </svg>
+    <p class="text-gray-600 mt-3">Memuat produk...</p>
+    </div>
 
-                    {# SARAN: Tambahkan field 'description' pada model Product Anda #}
-                    {% if product.description %}
-                    <p class="description">{{ product.description|truncatewords:15 }}</p>
-                    {% endif %}
-                </div>
-                <div class="card-footer">
-                <a href="{% url 'main:show_product' product.id %}" class="card-btn btn-details">Lihat Detail</a>
-                {% if user.is_authenticated and product.user == user %}
-                    <a href="{% url 'main:edit_product' product.pk %}" class="card-btn btn-edit">Edit</a>
-                    <a href="{% url 'main:delete_product' product.pk %}" 
-                    class="card-btn btn-delete" 
-                    onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
-                    Delete
-                    </a>
-                {% endif %}
-            </div>
-            </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center" role="alert">
+        <strong class="font-bold">Terjadi Kesalahan!</strong>
+        <span class="block sm:inline">Tidak dapat memuat data produk. Silakan coba lagi nanti.</span>
+    </div>
+
+    <div id="grid" class="hidden"></div>
+
+    <div id="empty" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
+    <div class="w-32 h-32 mx-auto mb-4">
+        <img src="{% static 'image/no_product.jpg' %}" alt="Tidak ada produk" class="w-full h-full object-contain">
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">Produk tidak ditemukan</h3>
+    <p class="text-gray-500 mb-6">Jadilah yang pertama menambahkan produk ke dalam toko.</p>
+    <button id="add-product-from-empty" type="button" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+    Tambah Produk
+</button>
+    </div>
+
 </div>
+
+<script>
+// ===================================================================================
+// SCRIPT UNTUK MENGELOLA TAMPILAN PRODUK SECARA DINAMIS
+// ===================================================================================
+
+// --- Konfigurasi ---
+const PRODUCTS_API_ENDPOINT = "{% url 'main:show_json' %}"; // Pastikan URL ini mengembalikan JSON produk
+const CURRENT_USER_ID = "{{ user.id|default_if_none:'' }}";
+
+// --- Elemen DOM ---
+const loadingSpinner = document.getElementById('loading');
+const errorMessage = document.getElementById('error');
+const emptyStateDisplay = document.getElementById('empty');
+const productGridContainer = document.getElementById('grid');
+const showAllProductsButton = document.getElementById('filter-all');
+const showMyProductsButton = document.getElementById('filter-my');
+
+// --- Variabel State ---
+let activeFilter = 'all';
+let allProductsData = [];
+
+// --- Fungsi untuk memperbarui tampilan tombol filter ---
+// Ganti seluruh fungsi ini
+function updateFilterButtonsAppearance() {
+    if (!showAllProductsButton || !showMyProductsButton) return;
+    
+    // Menggunakan kelas .btn yang baru
+    const baseClass = 'btn';
+    const activeClass = 'btn-primary';
+    const inactiveClass = 'btn-secondary';
+
+    if (activeFilter === 'all') {
+        showAllProductsButton.className = `${baseClass} ${activeClass}`;
+        showMyProductsButton.className = `${baseClass} ${inactiveClass}`;
+    } else {
+        showMyProductsButton.className = `${baseClass} ${activeClass}`;
+        showAllProductsButton.className = `${baseClass} ${inactiveClass}`;
+    }
+}
+
+// --- Fungsi untuk menampilkan/menyembunyikan bagian halaman ---
+function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
+    loadingSpinner.classList.toggle('hidden', !showLoading);
+    errorMessage.classList.toggle('hidden', !showError);
+    emptyStateDisplay.classList.toggle('hidden', !showEmpty);
+    productGridContainer.classList.toggle('hidden', !showGrid);
+    
+    if (showGrid) {
+        // Menerapkan gaya grid dari Tailwind CSS
+        productGridContainer.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+    }
+}
+
+// --- Fungsi untuk membuat elemen kartu produk ---
+function buildProductCardElement(product) {
+    const cardElement = document.createElement('article');
+    // Menggunakan gaya dari CSS yang sudah ada di <style> block di atas
+    cardElement.className = 'product-card';
+
+
+    // Format harga ke Rupiah
+    const formattedPrice = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(product.fields.price || 0);
+
+    // Potong deskripsi agar tidak terlalu panjang
+    const shortDescription = product.fields.description ? product.fields.description.substring(0, 100) + '...' : 'Tidak ada deskripsi.';
+    
+    const thumbnailHtml = product.fields.thumbnail 
+        ? `<img src='${product.fields.thumbnail}' alt='${product.fields.name}' class='w-full h-48 object-cover'>` 
+        : `<div class='w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500'>No Image</div>`;
+
+    // Tentukan tombol edit/delete HANYA jika produk milik user
+    const ownerButtons = CURRENT_USER_ID && Number(CURRENT_USER_ID) === Number(product.fields.user)
+    // --- UBAH DI SINI ---
+    ? `<button type="button" class="btn btn-secondary" onclick='openEditModal("${product.pk}")'>Edit</button>
+       <button type="button" class="btn btn-delete" onclick='confirmDelete("${product.pk}", "${product.fields.name}")'>Delete</button>`
+    : '';
+
+const completeCardHtml = `
+    <div class="card-image">
+        ${thumbnailHtml}
+    </div>
+    <div class="card-body">
+        <h3><a href="javascript:void(0);" onclick="openDetailModal('${product.pk}')" class="hover:underline">${product.fields.name}</a></h3>
+        <p class="price">${formattedPrice}</p>
+        <p class="description">${shortDescription}</p>
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary" onclick="openDetailModal('${product.pk}')">
+            Lihat Detail
+        </button>
+        ${ownerButtons}
+    </div>
+`;
+
+
+    cardElement.innerHTML = completeCardHtml;
+    return cardElement;
+}
+
+// --- Fungsi untuk merender semua kartu produk ---
+function renderAllProductCards(products) {
+    productGridContainer.innerHTML = '';
+    products.forEach(product => {
+        const cardElement = buildProductCardElement(product);
+        productGridContainer.appendChild(cardElement);
+    });
+}
+
+// --- Fungsi untuk memfilter dan menampilkan produk ---
+function filterAndDisplayProducts() {
+    updateFilterButtonsAppearance();
+    
+    const filteredProducts = activeFilter === 'all' 
+        ? allProductsData 
+        : allProductsData.filter(product => Number(product.fields.user) === Number(CURRENT_USER_ID));
+    
+    if (filteredProducts.length === 0) {
+        displayPageSection({ showEmpty: true });
+    } else {
+        renderAllProductCards(filteredProducts);
+        displayPageSection({ showGrid: true });
+    }
+}
+
+// --- Fungsi untuk mengambil data produk dari server ---
+async function fetchProductsFromServer() {
+    try {
+        displayPageSection({ showLoading: true });
+        
+        const response = await fetch(PRODUCTS_API_ENDPOINT);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const productData = await response.json();
+        allProductsData = productData || [];
+        
+        filterAndDisplayProducts();
+    } catch (error) {
+        console.error('Error memuat produk:', error);
+        displayPageSection({ showError: true });
+    }
+}
+
+// --- Event Handlers ---
+function handleShowAllProductsClick() {
+    activeFilter = 'all';
+    filterAndDisplayProducts();
+}
+
+function handleShowMyProductsClick() {
+    activeFilter = 'my';
+    filterAndDisplayProducts();
+}
+
+// --- Inisialisasi Halaman ---
+function initializeShopPage() {
+    showAllProductsButton.addEventListener('click', handleShowAllProductsClick);
+    showMyProductsButton.addEventListener('click', handleShowMyProductsClick);
+    
+    fetchProductsFromServer();
+}
+async function openDetailModal(productId) {
+    // 1. Buka modal dengan status loading
+    openModal({
+        title: 'Memuat Detail Produk...',
+        bodyHtml: `
+            <div class="text-center p-8">
+                <svg class="animate-spin h-8 w-8 text-green-600 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+            </div>
+        `,
+        footerHtml: '' // Sembunyikan footer sementara
+    });
+
+    try {
+        // 2. Buat URL API dan ambil data
+        const apiUrl = `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', productId);
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+            throw new Error('Gagal mengambil data dari server.');
+        }
+        const data = await response.json();
+
+        // 3. Format data untuk ditampilkan
+        const formattedPrice = new Intl.NumberFormat('id-ID', {
+            style: 'currency', currency: 'IDR', minimumFractionDigits: 0
+        }).format(data.price || 0);
+
+        const imageUrl = data.thumbnail || "{% static 'path/to/default/image.jpg' %}"; // Ganti dengan path gambar default jika perlu
+
+        // 4. Buat konten HTML untuk body modal
+        const modalBodyContent = `
+                <img src="${imageUrl}" alt="Gambar ${data.name}" class="w-full h-64 object-contain rounded-lg mb-4 bg-gray-100">
+                <p class="text-sm text-gray-500 mb-4">Dijual oleh: <strong>${data.user_username || 'Anonim'}</strong></p>
+                
+                <p class="text-4xl font-extrabold text-accent mb-4">${formattedPrice}</p>
+                
+                <div class="prose max-w-none">
+                    <h3 class="font-semibold text-gray-800">Deskripsi</h3>
+                    <p class="text-gray-700 whitespace-pre-line">${data.description || 'Tidak ada deskripsi.'}</p>
+                </div>
+            `;
+
+        // 5. Update modal dengan konten yang sudah jadi
+        openModal({
+                title: data.name,
+                bodyHtml: modalBodyContent,
+                footerHtml: `
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Tutup</button>
+                    <button type="button" class="btn btn-primary ml-3">Tambah ke Keranjang</button>
+                `
+            });
+
+    } catch (error) {
+        // Jika terjadi error saat fetch
+        console.error("Error di openDetailModal:", error);
+        openModal({
+            title: 'Error',
+            bodyHtml: '<p>Gagal memuat detail produk. Silakan coba lagi nanti.</p>',
+        });
+    }
+}
+
+function handleCreateProduct() {
+    // 1. Ambil tombol dari navbar
+    const showModalButton = document.getElementById('show-create-modal-btn');
+    // Tombol di empty state juga bisa ditambahkan di sini jika perlu
+    const showModalFromEmptyButton = document.getElementById('add-product-from-empty');
+
+    const openCreateModal = () => {
+        // 2. Tampilkan modal dengan form di dalamnya
+        openModal({
+            title: 'Tambah Produk Baru',
+            bodyHtml: `
+                <form id="create-product-form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div id="form-errors" class="hidden ..."></div>
+
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-red-500 text-sm mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </form>
+            `,
+            footerHtml: `
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                <button type="submit" form="create-product-form" class="btn btn-primary ml-3">Simpan Produk</button>
+            `
+        });
+
+        // 3. Tambahkan event listener untuk form yang BARU SAJA dibuat di modal
+        const form = document.getElementById('create-product-form');
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Mencegah reload halaman
+
+            const formData = new FormData(form);
+            const response = await fetch("{% url 'main:create_product_ajax' %}", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                closeModal();
+                // Gunakan notifikasi toast yang sudah Anda miliki
+                showToast({ type: 'success', title: 'Berhasil!', message: result.message });
+                // Muat ulang daftar produk untuk menampilkan data baru
+                fetchProductsFromServer();
+            } else {
+                // Tampilkan pesan error validasi
+                const errorContainer = document.getElementById('form-errors');
+                errorContainer.innerHTML = 'Terdapat kesalahan pada isian Anda. Silakan perbaiki.';
+                errorContainer.classList.remove('hidden');
+                console.error('Validation errors:', result.errors);
+            }
+        });
+    };
+
+    showModalButton.addEventListener('click', openCreateModal);
+    showModalFromEmptyButton.addEventListener('click', openCreateModal);
+}
+
+// --- Fungsi untuk Konfirmasi Delete ---
+function confirmDelete(productId, productName) {
+    openModal({
+        title: 'Konfirmasi Hapus',
+        bodyHtml: `<p>Apakah Anda yakin ingin menghapus produk "<strong>${productName}</strong>"? Tindakan ini tidak dapat dibatalkan.</p>`,
+        footerHtml: `
+            <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+            <button type="button" class="btn btn-delete ml-3" onclick="deleteProduct('${productId}')">Ya, Hapus</button>
+        `
+    });
+}
+
+// --- Fungsi untuk Proses Delete via AJAX ---
+async function deleteProduct(productId) {
+    const deleteUrl = `{% url 'main:delete_product_ajax' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', productId);
+    
+    const response = await fetch(deleteUrl, {
+        method: 'POST',
+        headers: {
+            // Jika Anda menggunakan CSRF token di header, tambahkan di sini
+            // "X-CSRFToken": getCookie('csrftoken'), 
+        },
+    });
+
+    const result = await response.json();
+
+    if (result.status === 'success') {
+        closeModal();
+        showToast({ type: 'success', title: 'Berhasil!', message: result.message });
+        // Muat ulang daftar produk untuk menghapus kartu yang sudah dihapus
+        fetchProductsFromServer(); 
+    } else {
+        closeModal();
+        showToast({ type: 'error', title: 'Gagal!', message: result.message });
+    }
+}
+
+// --- Fungsi untuk Proses Edit via AJAX ---
+async function openEditModal(productId) {
+    // 1. Ambil data produk yang ada saat ini
+    const detailUrl = `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', productId);
+    const response = await fetch(detailUrl);
+    const productData = await response.json();
+
+    // 2. Buka modal dengan form yang sudah terisi data
+    openModal({
+        title: `Edit Produk: ${productData.name}`,
+        bodyHtml: `
+            <form id="edit-product-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_name">Name</label>
+                    <input type="text" name="name" value="${productData.name}" id="id_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="id_price">Price</label>
+                    <input type="number" name="price" value="${productData.price}" id="id_price" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="id_description">Description</label>
+                    <textarea name="description" id="id_description" class="form-control">${productData.description}</textarea>
+                </div>
+                </form>
+        `,
+        footerHtml: `
+            <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+            <button type="submit" form="edit-product-form" class="btn btn-primary ml-3">Simpan Perubahan</button>
+        `
+    });
+
+    // 3. Tangani submit form edit
+    const form = document.getElementById('edit-product-form');
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const editUrl = `{% url 'main:edit_product_ajax' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', productId);
+
+        const response = await fetch(editUrl, {
+            method: 'POST',
+            body: formData,
+        });
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            closeModal();
+            showToast({ type: 'success', title: 'Berhasil!', message: result.message });
+            fetchProductsFromServer(); // Refresh daftar produk
+        } else {
+            alert('Gagal menyimpan perubahan. Periksa kembali isian Anda.');
+        }
+    });
+}
+// Panggil fungsi baru ini saat halaman dimuat
+document.addEventListener('DOMContentLoaded', handleCreateProduct);
+// --- Mulai Aplikasi ---
+document.addEventListener('DOMContentLoaded', initializeShopPage);
+</script>
+
 {% endblock content %}

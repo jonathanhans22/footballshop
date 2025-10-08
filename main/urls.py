@@ -1,21 +1,36 @@
 # urls.py
 
 from django.urls import path
-from main.views import delete_product, edit_product, show_main, create_product, show_product, show_xml, show_json, show_xml_by_id, show_json_by_id, register, login_user,logout_user
+# Pastikan semua view yang dibutuhkan sudah diimpor
+from main.views import (
+    show_main, create_product_ajax, show_product, show_xml, 
+    show_json, show_xml_by_id, show_json_by_id, register, 
+    login_user, logout_user, edit_product_ajax, delete_product_ajax
+)
 
 app_name = 'main'
 
 urlpatterns = [
     path('', show_main, name='show_main'),
-    path('create-product/', create_product, name='create_product'),
-    path('<uuid:id>', show_product, name='show_product'), 
-    path('xml/', show_xml, name='show_xml'),
+    
+    # URL untuk halaman (jika masih ada, seperti halaman detail non-AJAX)
+    path('product/<uuid:id>/', show_product, name='show_product'), 
+    
+    # URL untuk JSON (API Endpoints)
     path('json/', show_json, name='show_json'),
+    path('json/<uuid:product_id>/', show_json_by_id, name='show_json_by_id'),
+    
+    # URL untuk XML
+    path('xml/', show_xml, name='show_xml'),
     path('xml/<uuid:product_id>/', show_xml_by_id, name='show_xml_by_id'), 
-    path('json/<uuid:product_id>/', show_json_by_id, name='show_json_by_id'), 
+    
+    # URL untuk Autentikasi
     path('register/', register, name='register'),
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
-    path('<uuid:id>/edit', edit_product, name='edit_product'),
-    path('<uuid:id>/delete', delete_product, name='delete_product'),
+    
+    # URL untuk AJAX CRUD
+    path('create-product-ajax/', create_product_ajax, name='create_product_ajax'),
+    path('edit-product-ajax/<uuid:id>/', edit_product_ajax, name='edit_product_ajax'), # <-- PERBAIKAN DI SINI
+    path('delete-product-ajax/<uuid:id>/', delete_product_ajax, name='delete_product_ajax'), # <-- PERBAIKAN DI SINI
 ]

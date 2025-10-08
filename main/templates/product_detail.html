@@ -1,171 +1,147 @@
 {% extends 'base.html' %}
-{% load humanize %}  {% block content %}
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        color: #333;
-    }
+{% load static %}
+{% load humanize %}
 
-    .container {
-        max-width: 960px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
+{% block meta %}
+<title>Detail Produk - Football Shop</title>
+{% endblock meta %}
 
-    .back-button {
-        display: inline-block;
-        padding: 10px 18px;
-        background-color: #6c757d;
-        color: white;
-        text-decoration: none;
-        border-radius: 6px;
-        font-weight: bold;
-        transition: background-color 0.3s;
-        margin-bottom: 1.5rem;
-    }
+{% block content %}
+{% include 'navbar.html' %}
 
-    .back-button:hover {
-        background-color: #5a6268;
-    }
-
-    .product-layout {
-        display: flex;
-        gap: 2rem;
-        flex-wrap: wrap;
-    }
-
-    .product-image {
-        flex: 1;
-        min-width: 300px;
-    }
-
-    .product-image img {
-        width: 100%;
-        height: auto;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-
-    .product-details {
-        flex: 2;
-        min-width: 300px;
-    }
-
-    .product-brand {
-        color: #6c757d;
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .product-name {
-        font-size: 2.5rem;
-        margin-top: 0;
-        margin-bottom: 1rem;
-        color: #1a1a1a;
-    }
-
-    .product-price {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #007bff;
-        margin-bottom: 1.5rem;
-    }
-
-    .product-meta {
-        margin-bottom: 1.5rem;
-    }
-    
-    .badge {
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 16px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-right: 0.5rem;
-    }
-
-    .badge-category {
-        background-color: #e2eafc;
-        color: #0042d6;
-    }
-    
-    .badge-featured {
-        background-color: #fff0c1;
-        color: #795508;
-    }
-
-    .product-description {
-        line-height: 1.6;
-    }
-    
-    .cta-button {
-        display: inline-block;
-        padding: 12px 24px;
-        background-color: #28a745;
-        color: white;
-        text-decoration: none;
-        border-radius: 6px;
-        font-weight: bold;
-        font-size: 1.1rem;
-        transition: background-color 0.3s;
-        margin-top: 2rem;
-        border: none;
-        cursor: pointer;
-    }
-
-    .cta-button:hover {
-        background-color: #218838;
-    }
-    
-    @media (max-width: 768px) {
-        .product-layout {
-            flex-direction: column;
-        }
-        .container {
-            padding: 1rem;
-        }
-        .product-name {
-            font-size: 2rem;
-        }
-    }
-</style>
-
-<div class="container">
-    <a href="{% url 'main:show_main' %}" class="back-button">← Kembali ke Daftar Produk</a>
-
-    <div class="product-layout">
-        <div class="product-image">
-            {% if product.thumbnail %}
-                <img src="{{ product.thumbnail }}" alt="Thumbnail for {{ product.name }}">
-            {% else %}
-                <img src="https://via.placeholder.com/400x400.png?text=No+Image" alt="No image available">
-            {% endif %}
+<div class="bg-gray-50 w-full min-h-screen pt-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="mb-6">
+            <a href="{% url 'main:show_main' %}" class="inline-flex items-center text-gray-600 hover:text-gray-900 font-medium transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                Kembali ke Daftar Produk
+            </a>
+        </div>
+        
+        <div id="loading-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+            <svg class="animate-spin h-8 w-8 text-green-600 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <p class="text-gray-600 mt-3">Memuat detail produk...</p>
         </div>
 
-        <div class="product-details">
-            <p class="product-brand">{{ product.brand }}</p>
-            <h1 class="product-name">{{ product.name }}</h1>
-            
-            <div class="product-meta">
-                <span class="badge badge-category">{{ product.get_category_display }}</span>
-                {% if product.is_featured %}
-                    <span class="badge badge-featured">⭐ Produk Unggulan</span>
-                {% endif %}
-            </div>
-
-            <p class="product-price">Rp {{ product.price|intcomma }}</p>
-            
-            <div class="product-description">
-                <h3>Deskripsi Produk</h3>
-                <p>{{ product.description|linebreaks }}</p>
-            </div>
-
-            <button class="cta-button">🛒 Tambah ke Keranjang</button>
+        <div id="error-state" class="bg-white rounded-lg border border-red-300 p-12 text-center hidden">
+            <div class="text-red-500 text-5xl mb-4">⚠️</div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Gagal Memuat Detail Produk</h3>
+            <p class="text-gray-500">Terjadi kesalahan saat mengambil data. Silakan coba lagi nanti.</p>
         </div>
+        
+        <article id="product-details-content" class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden hidden">
+            
+            <div id="product-image-container" class="bg-gray-100 hidden">
+                <img id="product-image" src="" alt="Gambar Produk" class="w-full h-80 object-contain">
+            </div>
+
+            <div class="p-6 sm:p-8">
+                <div id="badges-container" class="flex flex-wrap items-center gap-2 mb-4">
+                    </div>
+                
+                <h1 id="product-name" class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-3">
+                    </h1>
+                
+                <p id="product-seller" class="text-sm text-gray-500 mb-5">
+                    </p>
+
+                <p id="product-price" class="text-4xl font-extrabold text-green-600 mb-6">
+                    </p>
+
+                <div class="prose prose-lg max-w-none">
+                    <h3 class="font-semibold text-gray-800">Deskripsi Produk</h3>
+                    <div id="product-description" class="text-gray-700 leading-relaxed whitespace-pre-line">
+                        </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 p-6 sm:p-8 bg-gray-50">
+                <button class="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Tambah ke Keranjang
+                </button>
+            </div>
+        </article>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Elemen DOM ---
+    const loadingState = document.getElementById('loading-state');
+    const errorState = document.getElementById('error-state');
+    const productContent = document.getElementById('product-details-content');
+
+    // --- Ambil ID Produk dari URL (diasumsikan dari Django context) ---
+    const productId = "{{ product_pk }}";
+    const apiUrl = `{% url 'main:show_json_by_id' 0 %}`.replace('0', productId);
+
+    // --- Fungsi untuk merender data produk ke halaman ---
+    function renderProductDetails(data) {
+        // Teks dan Angka
+        document.getElementById('product-name').textContent = data.name;
+        document.getElementById('product-seller').textContent = `Dijual oleh: ${data.user_username || 'Anonim'}`;
+        document.getElementById('product-description').innerHTML = data.description || 'Tidak ada deskripsi.';
+        
+        // Format Harga ke Rupiah
+        const formattedPrice = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(data.price || 0);
+        document.getElementById('product-price').textContent = formattedPrice;
+
+        // Gambar Produk
+        if (data.thumbnail) {
+            const imgContainer = document.getElementById('product-image-container');
+            const imgElement = document.getElementById('product-image');
+            imgElement.src = data.thumbnail;
+            imgElement.alt = `Gambar ${data.name}`;
+            imgContainer.classList.remove('hidden');
+        }
+
+        // Badges (Kategori, dll)
+        const badgesContainer = document.getElementById('badges-container');
+        if (data.category) {
+            const categoryBadge = document.createElement('span');
+            categoryBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
+            categoryBadge.textContent = data.category;
+            badgesContainer.appendChild(categoryBadge);
+        }
+    }
+
+    // --- Fungsi untuk mengambil data dari API ---
+    async function fetchProductDetails() {
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            // Render data dan tampilkan konten
+            renderProductDetails(data);
+            loadingState.classList.add('hidden');
+            productContent.classList.remove('hidden');
+
+        } catch (error) {
+            console.error("Gagal mengambil detail produk:", error);
+            // Tampilkan status error
+            loadingState.classList.add('hidden');
+            errorState.classList.remove('hidden');
+        }
+    }
+
+    // --- Panggil fungsi untuk memulai proses ---
+    fetchProductDetails();
+});
+</script>
 {% endblock content %}

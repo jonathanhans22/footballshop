@@ -4,6 +4,22 @@ Nama : Jonathan Hans Emanuelle
 NPM : 2406414025
 
 Kelas : PBP B
+----------------TUGAS 6----------------
+1. Perbedaan Synchronous dan Asynchronous Request
+Perbedaan mendasar antara request sinkron (synchronous) dan asinkron (asynchronous) terletak pada cara browser menangani interaksi dengan server. Dalam model sinkron, yang merupakan metode tradisional, browser akan mengirim request dan "terkunci" atau blocking, memaksa pengguna menunggu hingga server memberikan respons penuh berupa halaman baru. Selama proses tunggu ini, halaman web menjadi tidak responsif. Sebaliknya, model asinkron yang dimungkinkan oleh AJAX, bekerja secara non-blocking di latar belakang. Browser dapat mengirim request sambil membiarkan pengguna tetap berinteraksi dengan halaman. Ketika data dari server tiba, hanya bagian tertentu dari halaman yang diperbarui menggunakan JavaScript, menciptakan pengalaman yang lebih mulus dan dinamis tanpa perlu me-refresh seluruh halaman.
+
+2. Alur Kerja AJAX di Django
+Alur request-response AJAX dalam aplikasi Django dimulai dari aksi pengguna di browser, seperti mengklik sebuah tombol. Aksi ini memicu JavaScript untuk mengirim request ke URL spesifik di server Django secara diam-diam. Di sisi server, urls.py Django akan mengarahkan request ini ke sebuah fungsi view yang telah disiapkan untuk menanganinya. Di dalam view, logika bisnis dieksekusi—misalnya, memproses data atau berinteraksi dengan database. Poin kuncinya adalah view tidak me-render template HTML penuh, melainkan mengembalikan respons dalam format data ringan seperti JSON, menggunakan JsonResponse dari Django. Data JSON ini kemudian diterima kembali oleh JavaScript di browser, yang akan menggunakannya untuk memanipulasi DOM (Document Object Model) dan memperbarui tampilan pada bagian halaman yang relevan secara instan.
+
+3. Keuntungan Menggunakan AJAX
+Implementasi AJAX pada Django memberikan sejumlah keuntungan signifikan dibandingkan dengan metode render halaman konvensional. Keuntungan utama adalah peningkatan drastis pada user experience, di mana website terasa jauh lebih cepat dan responsif karena tidak ada lagi efek "kedip" dari proses full-page reload. Selain itu, AJAX lebih efisien dalam penggunaan bandwidth, karena hanya data yang benar-benar dibutuhkan yang ditransfer antara klien dan server, bukan seluruh file HTML beserta asetnya. Hal ini tidak hanya mempercepat waktu muat, tetapi juga dapat mengurangi beban pada server. Hasilnya adalah sebuah aplikasi web yang lebih interaktif, lancar, dan terasa modern, mirip dengan aplikasi desktop.
+
+4. Aspek Keamanan pada AJAX
+Saat mengimplementasikan fitur sensitif seperti Login dan Register menggunakan AJAX, keamanan tetap menjadi prioritas utama. Semua praktik keamanan standar Django harus tetap diterapkan dengan disiplin. Setiap request POST yang dikirim melalui AJAX wajib menyertakan CSRF token di dalam header untuk mencegah serangan Cross-Site Request Forgery. Seluruh komunikasi harus dienkripsi menggunakan HTTPS untuk melindungi data dari penyadapan. Yang terpenting, validasi input tidak boleh hanya dilakukan di sisi klien dengan JavaScript; validasi yang sama harus selalu dilakukan kembali di sisi server (dalam view Django) karena validasi di klien sangat mudah untuk dilewati. Menerapkan mekanisme rate-limiting juga penting untuk mitigasi serangan brute-force pada endpoint otentikasi.
+
+5. Dampak AJAX pada User Experience (UX)
+AJAX secara fundamental mengubah pengalaman pengguna (UX) dengan mengubah website dari kumpulan halaman statis menjadi sebuah aplikasi yang dinamis dan interaktif. Dampak terbesarnya adalah memberikan feedback instan kepada pengguna dan menciptakan alur interaksi yang tidak terputus. Fitur seperti infinite scroll, validasi form secara real-time, atau kemampuan menambahkan produk ke keranjang tanpa meninggalkan halaman belanja adalah contoh nyata bagaimana AJAX mengurangi friksi dan frustrasi pengguna. Dengan menghilangkan jeda dan proses tunggu yang disebabkan oleh page reload, AJAX membuat pengguna tetap terlibat dan fokus pada konten, menghasilkan pengalaman yang lebih memuaskan, efisien, dan modern.
+
 ----------------TUGAS 5----------------
 1. Urutannya dari yang paling kuat ke yang paling lemah itu:
 
